@@ -50,12 +50,18 @@ class Player extends FlxSprite
 
 
         if (left) {
-            speed = -100;
+            speed -= 20;
         } else if (right) {
-            speed = 100;
+            speed += 20;
         } else {
-            speed = speed/2;
+            if (speed > 0) {
+                speed = Math.max(0, speed - 10);
+            } else {
+                speed = Math.min(0, speed + 10);
+            }
         }
+        
+        speed = FlxMath.bound(speed, -100, 100);
         velocity.set(speed, 0);
     }
 
