@@ -19,10 +19,10 @@ class InputManager
         var inputFrame = new InputFrame();
 
         inputFrame.set(Inputs.LEFT,
-                       FlxG.keys.anyPressed([LEFT]));
+                       FlxG.keys.anyPressed([A]));
 
         inputFrame.set(Inputs.RIGHT,
-                       FlxG.keys.anyPressed([RIGHT]));
+                       FlxG.keys.anyPressed([D]));
 
         return inputFrame;
     }
@@ -31,10 +31,10 @@ class InputManager
         var inputFrame = new InputFrame();
 
         inputFrame.set(Inputs.LEFT,
-                       FlxG.keys.anyPressed([A]));
+                       FlxG.keys.anyPressed([LEFT]));
 
         inputFrame.set(Inputs.RIGHT,
-                       FlxG.keys.anyPressed([D]));
+                       FlxG.keys.anyPressed([RIGHT]));
 
         return inputFrame;
     }
