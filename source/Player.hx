@@ -56,28 +56,17 @@ class Player extends FlxSprite
     public var facingRight:Bool;
 
     public var arrowSprite:FlxSprite;
-
-    public function toPixels(w:Float):Float {
-        return Stage.STAGE_WIDTH * w;
-    }
-
-    public function position():Float {
-        return ((x - stage.x) / Stage.STAGE_WIDTH) + 0.5 * PLAYER_SIZE;
-    }
     
     public function center():Float {
         return Stage.toUnitsOffset(x) + 0.5 * PLAYER_SIZE;
     }
 
     public function new(stage:Stage,
-                        game:PlayState,
                         playerType:PlayerType,
                         inputType:InputType)
     {
         super();
 
-        this.stage = stage;
-        this.game = game;
         this.playerType = playerType;
         this.inputType = inputType;
 
