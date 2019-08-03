@@ -17,15 +17,24 @@ class Player extends FlxSprite
 
     public var speed:Float = 0;
 
-    public function new(stage:Stage, ?X:Float=0)
+    public var firstPlayer:Bool;
+
+    public function new(stage:Stage, ?X:Float=0, firstPlayer_:Bool=true)
     {
         super();
 
         this.stage = stage;
-
-        makeGraphic(PLAYER_WIDTH, 
-                    PLAYER_HEIGHT, 
-                    FlxColor.RED);
+        firstPlayer = firstPlayer_;
+        if(firstPlayer) {
+            makeGraphic(PLAYER_WIDTH, 
+                        PLAYER_HEIGHT, 
+                        FlxColor.RED);
+        }
+        else {
+            makeGraphic(PLAYER_WIDTH, 
+                        PLAYER_HEIGHT, 
+                        FlxColor.BLUE);
+        }
 
         x = stage.x + X;
         y = stage.y;
@@ -45,8 +54,15 @@ class Player extends FlxSprite
         var left:Bool = false;
         var right:Bool = false;
 
-        left = FlxG.keys.anyPressed([LEFT]);
-        right = FlxG.keys.anyPressed([RIGHT]);
+        if(firstPlayer) {
+            left = FlxG.keys.anyPressed([LEFT]);
+            right = FlxG.keys.anyPressed([RIGHT]);
+        }
+        else {
+            left = FlxG.keys.anyPressed([A]);
+            right = FlxG.keys.anyPressed([D]);
+        }
+
 
 
         if (left) {
