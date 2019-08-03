@@ -20,8 +20,15 @@ class PlayState extends FlxState
 		add(stage);
 		stage.screenCenter();
 
-		player1 = new Player(stage, 20);
+		player1 = new Player(stage,
+							 Player.PlayerType.PLAYER_ONE,
+							 Player.InputType.KEYBOARD_ONE);
 		add(player1);
+
+		player2 = new Player(stage,
+							 Player.PlayerType.PLAYER_TWO,
+							 Player.InputType.KEYBOARD_TWO);
+		add(player2);
 	}
 
 	override public function update(elapsed:Float):Void
