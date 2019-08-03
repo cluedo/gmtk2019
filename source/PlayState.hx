@@ -29,11 +29,13 @@ class PlayState extends FlxState
 							 Player.PlayerType.PLAYER_ONE,
 							 Player.InputType.KEYBOARD_ONE);
 		add(player1);
+		add(player1.arrowSprite);
 
 		player2 = new Player(stage,
 							 Player.PlayerType.PLAYER_TWO,
 							 Player.InputType.KEYBOARD_TWO);
 		add(player2);
+		add(player2.arrowSprite);
 
 		activeHitboxes = new List<Hitbox>();
 	}
