@@ -4,12 +4,23 @@ import flixel.FlxSprite;
 import flixel.util.FlxColor;
 
 class Hitbox extends FlxSprite {
-    public var duration:Float
-    public var currentDuration:Float;
+    public var activeDuration:Float;
+    public var totalDuration:Float;
 
-    public function new(width:Float, xCoordinate:Float, duration:Float, strength:Float, color:FlxColor) {
-        this.duration = duration;
-        this.currentDuration = duration;
+    public var age:Float;
+
+    public var player:Player;
+
+    public function new(player:Player, width:Float, xCoordinate:Float, totalDuration:Float, activeDuration:Float, knockback:Float, color:FlxColor) {
+        super();
+
+        this.activeDuration = activeDuration;
+        this.totalDuration = totalDuration;
+        this.age = 0;
+
+        makeGraphic(width, Stage.STAGE_HEIGHT, color);
+        x = xCoordinate;
+        y = player.y;
     }
 
     override public function update(elapsed:Float):Void {
