@@ -37,12 +37,9 @@ class PlayState extends FlxState
 							 Player.PlayerType.PLAYER_TWO,
 							 Player.InputType.KEYBOARD_TWO);
 		add(player2);
-<<<<<<< HEAD
 		add(player2.arrowSprite);
-=======
 
 		activeHitboxes = new List<Hitbox>();
->>>>>>> 3a811e899774851fa24ab3618b0e844cf7713ad9
 	}
 
 	override public function update(elapsed:Float) {
