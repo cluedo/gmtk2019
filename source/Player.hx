@@ -31,6 +31,12 @@ class Player extends FlxSprite
         PlayerType.PLAYER_TWO => 0.8 - PLAYER_SIZE,
     ];
 
+    // Whether the players start facing right
+    public static var PLAYER_INITIAL_DIRECTIONS = [
+        PlayerType.PLAYER_ONE => true,
+        PlayerType.PLAYER_TWO => false,
+    ];
+
     public var playerType:PlayerType;
     public var inputType:InputType;
 
@@ -38,6 +44,7 @@ class Player extends FlxSprite
     public var game:PlayState;
 
     public var speed:Float = 0;
+    public var facingRight:Bool;
 
     public function toPixels(w:Float):Float {
         return Stage.STAGE_WIDTH * w;
@@ -63,6 +70,8 @@ class Player extends FlxSprite
 
         x = stage.x + toPixels(PLAYER_OFFSETS[playerType]);
         y = stage.y;
+
+        this.facingRight = PLAYER_INITIAL_DIRECTIONS[playerType];
     }
 
     public function getInputFrame():InputManager.InputFrame {
@@ -93,8 +102,10 @@ class Player extends FlxSprite
         } else {
             if (speed > 0) {
                 speed = Math.max(0, speed - 10);
+                facingRight = true;
             } else {
                 speed = Math.min(0, speed + 10);
+                facingRight = false;
             }
         }
         
