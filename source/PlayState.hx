@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxState;
 import flixel.util.FlxColor;
 
@@ -34,5 +35,13 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+
+		// This is just for testing, please comment out if you don't want to use this.
+		/*
+		if (FlxG.keys.pressed.Q) {
+			var testHitbox:Hitbox = new Hitbox(player1, 100, player1.x + 60, 1, .5);
+			add(testHitbox);
+		}
+		*/
 	}
 }
