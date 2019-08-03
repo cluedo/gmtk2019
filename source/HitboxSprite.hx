@@ -39,7 +39,7 @@ class HitboxSprite extends FlxSprite {
 
         age += elapsed;
         if (age > duration) {
-            visible = false;
+            kill();
         }
 	}
 }

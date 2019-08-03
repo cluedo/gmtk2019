@@ -27,6 +27,10 @@ class Hitbox {
         this.strength = strength;
     }
 
+    public function kill() {
+        time = duration;
+    }
+
     public function alive():Bool {
         return (time < duration);
     }

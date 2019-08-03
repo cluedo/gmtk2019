@@ -46,8 +46,16 @@ class Player extends FlxSprite
     public var speed:Float = 0;
     public var facingRight:Bool;
 
+    public function left():Float {
+        return Stage.toUnitsOffset(x);
+    }
+
     public function center():Float {
         return Stage.toUnitsOffset(x) + 0.5 * PLAYER_SIZE;
+    }
+
+    public function right():Float {
+        return Stage.toUnitsOffset(x) + PLAYER_SIZE;
     }
 
     public function new(stage:Stage,
@@ -139,4 +147,17 @@ class Player extends FlxSprite
         }
     }
 
+    public function collide(hitbox:Hitbox) {
+        if (this == hitbox.player) return;
+
+        var hbox_left = hitbox.center - hitbox.radius;
+        var hbox_right = hitbox.center + hitbox.radius;
+
+        if (right() < hbox_left || left() > hbox_right) {
+            return;
+        } 
+
+        trace("HIT!");
+        hitbox.kill();
+    }
 }

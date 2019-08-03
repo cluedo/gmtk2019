@@ -46,6 +46,13 @@ class PlayState extends FlxState
 		player2.removeStale();
 
 		// do collision
+		for (hitbox in player1.activeHitboxes) {
+			player2.collide(hitbox);
+		}
+
+		for (hitbox in player2.activeHitboxes) {
+			player1.collide(hitbox);
+		}
 
 
 		// tick
