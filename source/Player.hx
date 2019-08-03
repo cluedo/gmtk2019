@@ -31,6 +31,12 @@ class Player extends FlxSprite
         PlayerType.PLAYER_TWO => 0.8 - PLAYER_SIZE,
     ];
 
+    // Whether the players start facing right
+    public static var PLAYER_INITIAL_DIRECTIONS = [
+        PlayerType.PLAYER_ONE => true,
+        PlayerType.PLAYER_TWO => false,
+    ];
+
     public var playerType:PlayerType;
     public var inputType:InputType;
 
@@ -38,6 +44,7 @@ class Player extends FlxSprite
     public var activeHitboxes:List<Hitbox>;
 
     public var speed:Float = 0;
+    public var facingRight:Bool;
 
     public function center():Float {
         return Stage.toUnitsOffset(x) + 0.5 * PLAYER_SIZE;
@@ -61,6 +68,8 @@ class Player extends FlxSprite
 
         activeHitboxes = new List<Hitbox>();
         activeAttacks = new List<Attack>();
+
+        this.facingRight = PLAYER_INITIAL_DIRECTIONS[playerType];
     }
 
     public function getInputFrame():InputManager.InputFrame {
@@ -91,8 +100,10 @@ class Player extends FlxSprite
         } else {
             if (speed > 0) {
                 speed = Math.max(0, speed - 10);
+                facingRight = true;
             } else {
                 speed = Math.min(0, speed + 10);
+                facingRight = false;
             }
         }
         
