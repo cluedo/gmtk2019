@@ -6,14 +6,18 @@ import flixel.util.FlxColor;
 
 class PlayState extends FlxState
 {
+	public static var currentGame:PlayState;
+
 	public var stage:Stage;
 
 	public var player1:Player;
 	public var player2:Player;
 
-	override public function create():Void
-	{
+	public var activeHitboxes:List<Hitbox>;
+
+	override public function create() {
 		super.create();
+		currentGame = this;
 
 		bgColor = FlxColor.WHITE;
 
@@ -33,19 +37,31 @@ class PlayState extends FlxState
 							 Player.PlayerType.PLAYER_TWO,
 							 Player.InputType.KEYBOARD_TWO);
 		add(player2);
+<<<<<<< HEAD
 		add(player2.arrowSprite);
+=======
+
+		activeHitboxes = new List<Hitbox>();
+>>>>>>> 3a811e899774851fa24ab3618b0e844cf7713ad9
 	}
 
-	override public function update(elapsed:Float):Void
-	{
+	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-		// This is just for testing, please comment out if you don't want to use this.
-		/*
-		if (FlxG.keys.pressed.Q) {
-			var testHitbox:Hitbox = new Hitbox(player1, 100, player1.x + 60, 1, .5);
-			add(testHitbox);
-		}
-		*/
+		// remove stale hitboxes/attacks
+		player1.removeStale();
+		player2.removeStale();
+
+		// do collision
+
+
+		// tick
+		player1.tick();
+		player2.tick();
+	}
+
+	public function activateHitbox(hitbox:Hitbox) {
+		hitbox.player.activeHitboxes.add(hitbox);
+		add(hitbox.sprite);
 	}
 }

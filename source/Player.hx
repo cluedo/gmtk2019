@@ -49,8 +49,8 @@ class Player extends FlxSprite
     public var playerType:PlayerType;
     public var inputType:InputType;
 
-    public var stage:Stage;
-    public var game:PlayState;
+    public var activeAttacks:List<Attack>;
+    public var activeHitboxes:List<Hitbox>;
 
     public var speed:Float = 0;
     public var facingRight:Bool;
@@ -63,6 +63,10 @@ class Player extends FlxSprite
 
     public function position():Float {
         return ((x - stage.x) / Stage.STAGE_WIDTH) + 0.5 * PLAYER_SIZE;
+    }
+    
+    public function center():Float {
+        return Stage.toUnitsOffset(x) + 0.5 * PLAYER_SIZE;
     }
 
     public function new(stage:Stage,
@@ -81,8 +85,11 @@ class Player extends FlxSprite
                     PLAYER_HEIGHT, 
                     PLAYER_COLORS[playerType]);
 
-        x = stage.x + toPixels(PLAYER_OFFSETS[playerType]);
-        y = stage.y;
+        x = Stage.toPixelsOffset(PLAYER_OFFSETS[playerType]);
+        y = Stage.currentStage.y;
+
+        activeHitboxes = new List<Hitbox>();
+        activeAttacks = new List<Attack>();
 
         this.facingRight = PLAYER_INITIAL_DIRECTIONS[playerType];
 
@@ -120,7 +127,7 @@ class Player extends FlxSprite
         movement(getInputFrame());
 		super.update(elapsed);
 
-        x = FlxMath.bound(x, stage.x, stage.x + Stage.STAGE_WIDTH - PLAYER_WIDTH);
+        x = FlxMath.bound(x, Stage.currentStage.x, Stage.currentStage.x + Stage.STAGE_WIDTH - PLAYER_WIDTH);
         updateArrow();
 	}
 
@@ -147,6 +154,34 @@ class Player extends FlxSprite
         }
 
         velocity.set(speed, 0);
+
+        if (inputFrame.get(InputManager.Inputs.ATTACK)) {
+            // stopgap until we implement attackLag
+            if (activeAttacks.isEmpty()) {
+                var attack = new Attack.JabAttack(this);
+                activeAttacks.add(attack);
+            } 
+        }
+    }
+
+    public function removeStale() {
+        for (hitbox in activeHitboxes) {
+			if (!hitbox.alive()) hitbox.sprite.kill();
+		}
+		activeHitboxes = activeHitboxes.filter(function(hitbox) return hitbox.alive());
+
+        activeAttacks = activeAttacks.filter(function(attack) return attack.alive());
+    }
+
+    public function tick() {
+        for (hitbox in activeHitboxes) {
+			hitbox.tick();
+		}
+
+        // tick attacks after hitboxes or hitbox will tick when created
+        for (attack in activeAttacks) {
+            attack.tick();
+        }
     }
 
 }
