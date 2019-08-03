@@ -5,8 +5,10 @@ import flixel.util.FlxColor;
 
 class PlayState extends FlxState
 {
-	public var stage:StageSprite;
-	public var game:Game;
+	public var stage:Stage;
+
+	public var player1:Player;
+	public var player2:Player;
 
 	override public function create():Void
 	{
@@ -14,12 +16,12 @@ class PlayState extends FlxState
 
 		bgColor = FlxColor.WHITE;
 
-		game = new Game();
-
-		stage = new StageSprite(game);
+		stage = new Stage();
 		add(stage);
-
 		stage.screenCenter();
+
+		player1 = new Player(stage, 20);
+		add(player1);
 	}
 
 	override public function update(elapsed:Float):Void

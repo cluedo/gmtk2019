@@ -33,6 +33,10 @@ class Player
     {
 
     }
+
+    public function render(x:Float):FlxColor {
+        
+    }
 }
 
 class InputFrame
