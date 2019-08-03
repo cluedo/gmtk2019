@@ -43,6 +43,10 @@ class Player extends FlxSprite
         return Stage.STAGE_WIDTH * w;
     }
 
+    public function position():Float {
+        return ((x - stage.x) / Stage.STAGE_WIDTH) + 0.5 * PLAYER_SIZE;
+    }
+
     public function new(stage:Stage,
                         playerType:PlayerType,
                         inputType:InputType)
