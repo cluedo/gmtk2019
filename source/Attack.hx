@@ -16,7 +16,7 @@ class Attack {
         this.duration = duration;
         this.attackLag = attackLag;
 
-        anchor = player.position();
+        anchor = player.center();
 
         hitboxes = [for (i in 0...duration) (new List<Hitbox>())];
     }
@@ -28,26 +28,30 @@ class Attack {
         hitboxes[offset].add(hitbox);
     }
 
+    public function alive():Bool {
+        return (time < duration);
+    }
+
     public function tick() {
         if (time >= duration) {
             return;
         }
 
         for (hitbox in hitboxes[time]) {
-            // hitbox.trigger();
+            hitbox.trigger();
         }
 
         time++;
     }
 }
 
-class Jab extends Attack {
-    public static var JAB_DURATION = 4;
+class JabAttack extends Attack {
+    public static var JAB_DURATION = 20;
     public static var JAB_ATTACK_LAG = 4;
 
     public function new(player:Player) {
         super(player, JAB_DURATION, JAB_ATTACK_LAG);
 
-        // addHitbox(0, Hitbox.JabHitbox());
+        addHitbox(0, new Hitbox.JabHitbox(player, anchor));
     }
 }

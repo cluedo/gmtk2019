@@ -1,45 +1,58 @@
 package;
 
-import flixel.FlxSprite;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.util.FlxColor;
+class Hitbox {
+    public static var FRAME_DURATION = 1./60;
 
-class Hitbox extends FlxSprite {
-    public var activeDuration:Float;
-    public var totalDuration:Float;
+    public var duration:Int;
+    public var radius:Float = 0;
+    public var strength:Float;
+    public var center:Float = 0;
 
-    public var age:Float;
-    public var isActive:Bool;
-
+    public var time:Int = 0;
+    public var active:Bool = false;
+    
     public var player:Player;
+    public var sprite:HitboxSprite;
 
-    public var colorTween:FlxTween;
+    public function new(player:Player,
+                        center:Float,
+                        duration:Int,
+                        radius:Float, 
+                        strength:Float) {
+        this.player = player;
+        this.center = center;
 
-    public function new(player:Player, width:Int, xCoordinate:Float, totalDuration:Float, activeDuration:Float, knockback:Float = 0, color:FlxColor = FlxColor.LIME) {
-        super();
-
-        this.activeDuration = activeDuration;
-        this.totalDuration = totalDuration;
-        this.age = 0;
-        this.isActive = true;
-
-        makeGraphic(width, Stage.STAGE_HEIGHT, color);
-        x = xCoordinate;
-        y = player.y;
-
-        colorTween = FlxTween.tween(this, {alpha: 0.0}, totalDuration, {type: FlxTweenType.ONESHOT, ease: FlxEase.cubeInOut});
+        this.duration = duration;
+        this.radius = radius;
+        this.strength = strength;
     }
 
-    override public function update(elapsed:Float):Void {
-		super.update(elapsed);
+    public function alive():Bool {
+        return (time < duration);
+    }
 
-        age += elapsed;
-        if (age > activeDuration) {
-            isActive = false;
-        }
-        if (age > totalDuration) {
-            visible = false;
-        }
-	}
+    public function tick() {
+        time++;
+    }
+
+    public function trigger() {
+        sprite = new HitboxSprite(Math.round(Stage.toPixels(2 * radius)),
+                                  Stage.toPixelsOffset(center - radius),
+                                  duration * FRAME_DURATION);
+        PlayState.currentGame.activateHitbox(this);
+    }
+}
+
+class JabHitbox extends Hitbox {
+    public static var JAB_HITBOX_DURATION = 4;
+    public static var JAB_HITBOX_RADIUS = 0.1;
+    public static var JAB_HITBOX_STRENGTH = 2.0;
+
+    public function new(player:Player,
+                        center:Float) {
+        super(player, center, 
+              JAB_HITBOX_DURATION,
+              JAB_HITBOX_RADIUS,
+              JAB_HITBOX_STRENGTH);
+    }
 }

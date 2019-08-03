@@ -5,6 +5,7 @@ import flixel.FlxG;
 enum Inputs{
     LEFT;
     RIGHT;
+    ATTACK;
 }
 
 typedef InputFrame = Map<Inputs, Bool>;
@@ -24,6 +25,9 @@ class InputManager
         inputFrame.set(Inputs.RIGHT,
                        FlxG.keys.anyPressed([D]));
 
+        inputFrame.set(Inputs.ATTACK,
+                       FlxG.keys.anyPressed([W]));
+
         return inputFrame;
     }
 
@@ -35,6 +39,9 @@ class InputManager
 
         inputFrame.set(Inputs.RIGHT,
                        FlxG.keys.anyPressed([RIGHT]));
+
+        inputFrame.set(Inputs.ATTACK,
+                       FlxG.keys.anyPressed([UP]));
 
         return inputFrame;
     }
