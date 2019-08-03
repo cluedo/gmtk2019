@@ -3,6 +3,7 @@ package;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 
 enum PlayerType{
     PLAYER_ONE;
@@ -45,6 +46,8 @@ class Player extends FlxSprite
 
     public var speed:Float = 0;
     public var facingRight:Bool;
+
+    public var invulnerable:Bool = false;
 
     public function center():Float {
         return Stage.toUnitsOffset(x) + 0.5 * PLAYER_SIZE;
@@ -117,7 +120,20 @@ class Player extends FlxSprite
                 activeAttacks.add(attack);
             } 
         }
+
+        var turnOffInvulnerability:FlxTimer->Void = function(t:FlxTimer){
+            invulnerable = false;
+            replaceColor(FlxColor.WHITE, PLAYER_COLORS[playerType]);
+        };
+        
+        if (inputFrame.get(InputManager.Inputs.DEFEND)) {
+            invulnerable = true;
+            replaceColor(PLAYER_COLORS[playerType], FlxColor.WHITE);
+            new FlxTimer().start(1, turnOffInvulnerability, 1);
+        }
     }
+
+
 
     public function removeStale() {
         for (hitbox in activeHitboxes) {
@@ -127,6 +143,8 @@ class Player extends FlxSprite
 
         activeAttacks = activeAttacks.filter(function(attack) return attack.alive());
     }
+
+
 
     public function tick() {
         for (hitbox in activeHitboxes) {
