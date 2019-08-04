@@ -52,8 +52,6 @@ class PlayState extends FlxState
 		add(player2);
 		add(player2.arrowSprite);
 
-		player1.playerAI = new AI.AttackAI(player1, player2); // delete
-
 		activeHitboxes = new List<Hitbox>();
 
 		inPreamble = true;
