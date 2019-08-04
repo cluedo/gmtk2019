@@ -1,12 +1,19 @@
 package;
 
+import flixel.math.FlxRandom;
+
 class AI
 {
     public var me:Player;
     public var other:Player;
+    
+    public var random:FlxRandom;
+
     public function new(me:Player, other:Player) {
         this.me = me;
         this.other = other;
+
+        random = new FlxRandom();
     }
 
     public function getInput():InputManager.InputFrame {
@@ -28,7 +35,16 @@ class AttackAI extends AI
         var attackTrigger:Float = 2*Hitbox.SwordHitbox.SWORD_HITBOX_RADIUS + Player.PLAYER_SIZE + 0.01;
         if (Math.abs(other.center() - me.center()) < 
                 attackTrigger) {
-            input[InputManager.Inputs.ATTACK] = true;
+            if (random.bool()) {
+                input[InputManager.Inputs.DEFEND] = true;
+            } else {
+                input[InputManager.Inputs.ATTACK] = true;
+            }
+            
+        }
+
+        if (random.bool(1)) {
+            input[InputManager.Inputs.DASH] = true;
         }
 
         return input;
