@@ -15,6 +15,7 @@ class Hitbox {
     public var player:Player;
     public var sprite:HitboxSprite;
     public var center:Float = 0;
+    public var anchor:Float = 0;
 
     public function new(player:Player,
                         center:Float,
@@ -31,6 +32,8 @@ class Hitbox {
         this.strength = strength;
         this.hitstun = hitstun;
         this.animationLength = animationLength;
+
+        anchor = center;
     }
 
     public function kill() {
@@ -87,5 +90,6 @@ class SwordHitbox extends Hitbox {
               SWORD_HITBOX_STRENGTH,
               SWORD_HITBOX_HITSTUN,
               SWORD_HITBOX_ANIMATION);
+        anchor = player.center();
     }
 }

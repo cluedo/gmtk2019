@@ -281,7 +281,7 @@ class Player extends FlxSprite
             return;
         } 
 
-        if (center() < hitbox.center) {
+        if (center() < hitbox.anchor) {
             airSpeed -= hitbox.strength;
         } else {
             airSpeed += hitbox.strength;
