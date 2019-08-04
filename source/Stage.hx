@@ -10,6 +10,9 @@ class Stage extends FlxSprite
 
     public static var currentStage:Stage;
 
+    public var paused:Bool = false;
+    public var someoneIsDead:Bool = false;
+
     public static function toPixels(w:Float):Float {
         return STAGE_WIDTH * w;
     }

@@ -3,6 +3,7 @@ package;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 using flixel.util.FlxSpriteUtil;
@@ -42,7 +43,7 @@ class Player extends FlxSprite
         PlayerType.PLAYER_TWO => FlxColor.LIME,
     ];
     public static var ARROW_OFFSET:Float = 3;
-    public static var ARROW_WIDTH:Float = 5;
+    public static var ARROW_WIDTH:Float = 7;
 
     public static var PLAYER_OFFSETS = [
         PlayerType.PLAYER_ONE => 0.2,
@@ -61,6 +62,8 @@ class Player extends FlxSprite
     public static var AIR_DRAG = 0.02;
     public static var AIR_MAX_SPEED = 1.0;
     public static var AIR_REPEL = 0.05;
+
+    public var stage:Stage;
 
     public var playerType:PlayerType;
     public var inputType:InputType;
@@ -110,6 +113,7 @@ class Player extends FlxSprite
     {
         super();
 
+        this.stage = stage;
         this.playerType = playerType;
         this.inputType = inputType;
 
@@ -158,10 +162,34 @@ class Player extends FlxSprite
         arrowSprite.flipX = facingRight;
     }
 
+    public function checkDeath():Void {
+        if (x < Stage.currentStage.x || x + PLAYER_WIDTH > Stage.currentStage.x + Stage.STAGE_WIDTH) {
+            // We died!
+            stage.paused = true;
+            FlxTween.tween(arrowSprite, {alpha: 0}, 1);
+            FlxTween.tween(this, {alpha: 0}, 1, {onComplete: finishDeath});
+        }
+    }
+
+    public function finishDeath(tween:FlxTween):Void {
+        if (playerType == PLAYER_ONE) {
+            Registry.player2Score += 1;
+        } else if (playerType == PLAYER_TWO) {
+            Registry.player1Score += 1;
+        }
+        stage.someoneIsDead = true;
+    }
+
     override public function update(elapsed:Float):Void
 	{
+        if (stage.paused) {
+            return;
+        }
+
         movement(getInputFrame());
 		super.update(elapsed);
+
+        checkDeath();
 
         x = FlxMath.bound(x, Stage.currentStage.x, Stage.currentStage.x + Stage.STAGE_WIDTH - PLAYER_WIDTH);
         updateArrow();
@@ -255,6 +283,10 @@ class Player extends FlxSprite
 
 
     public function tick() {
+        if (stage.paused) {
+            return;
+        }
+
         for (hitbox in activeHitboxes) {
 			hitbox.tick();
 		}

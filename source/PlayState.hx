@@ -43,6 +43,11 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
+		if (stage.someoneIsDead) {
+			// TODO: Probably want to display a "Player 1 wins!" message here
+			FlxG.switchState(new PlayState());
+		}
+
 		// remove stale hitboxes/attacks
 		player1.removeStale();
 		player2.removeStale();
