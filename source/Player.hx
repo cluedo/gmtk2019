@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 using flixel.util.FlxSpriteUtil;
 
 enum PlayerType {
@@ -62,6 +63,8 @@ class Player extends FlxSprite
     public var airSpeed:Float = 0;
 
     public var facingRight:Bool;
+
+    public var invulnerable:Bool = false;
 
     public var arrowSprite:FlxSprite;
 
@@ -179,7 +182,20 @@ class Player extends FlxSprite
                 activeAttacks.add(attack);
             } 
         }
+
+        var turnOffInvulnerability:FlxTimer->Void = function(t:FlxTimer){
+            invulnerable = false;
+            replaceColor(FlxColor.WHITE, PLAYER_COLORS[playerType]);
+        };
+        
+        if (inputFrame.get(InputManager.Inputs.DEFEND)) {
+            invulnerable = true;
+            replaceColor(PLAYER_COLORS[playerType], FlxColor.WHITE);
+            new FlxTimer().start(1, turnOffInvulnerability, 1);
+        }
     }
+
+
 
     public function removeStale() {
         for (hitbox in activeHitboxes) {
@@ -189,6 +205,8 @@ class Player extends FlxSprite
 
         activeAttacks = activeAttacks.filter(function(attack) return attack.alive());
     }
+
+
 
     public function tick() {
         for (hitbox in activeHitboxes) {
@@ -202,7 +220,7 @@ class Player extends FlxSprite
     }
 
     public function collide(hitbox:Hitbox) {
-        if (this == hitbox.player) return;
+        if (this == hitbox.player || this.invulnerable) return;
 
         var hbox_left = hitbox.center - hitbox.radius;
         var hbox_right = hitbox.center + hitbox.radius;
