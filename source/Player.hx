@@ -200,7 +200,7 @@ class Player extends FlxSprite
     }
 
     public function collide(hitbox:Hitbox) {
-        if (this == hitbox.player) return;
+        if (this == hitbox.player || this.invulnerable) return;
 
         var hbox_left = hitbox.center - hitbox.radius;
         var hbox_right = hitbox.center + hitbox.radius;
