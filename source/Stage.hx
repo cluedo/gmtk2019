@@ -10,7 +10,8 @@ class Stage extends FlxSprite
 
     public static var currentStage:Stage;
 
-    public var paused:Bool = false;
+    public var gameStarted:Bool = false;
+    public var someoneIsDying:Bool = false;
     public var someoneIsDead:Bool = false;
 
     public static function toPixels(w:Float):Float {
@@ -27,6 +28,10 @@ class Stage extends FlxSprite
 
     public static function toUnitsOffset(w:Float) {
         return toUnits(w - currentStage.x);
+    }
+
+    public function isPaused():Bool {
+        return (!gameStarted || someoneIsDying);
     }
 
     public function new()

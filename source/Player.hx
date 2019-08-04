@@ -139,6 +139,8 @@ class Player extends FlxSprite
         vertices.push(new FlxPoint(this.height/2 + ARROW_OFFSET + ARROW_WIDTH, this.height));
         vertices.push(new FlxPoint(this.height/2 + ARROW_OFFSET, this.height));
         arrowSprite.drawPolygon(vertices, PLAYER_ARROW_COLORS[playerType]);
+        updateArrow();
+        
         _hit_sound = FlxG.sound.load(AssetPaths.hit__wav, 0.3);
         _block_sound = FlxG.sound.load(AssetPaths.block__wav, 0.3);
         _attack_sound = FlxG.sound.load(AssetPaths.attack__wav, 0.3);
@@ -165,7 +167,7 @@ class Player extends FlxSprite
     public function checkDeath():Void {
         if (x < Stage.currentStage.x || x + PLAYER_WIDTH > Stage.currentStage.x + Stage.STAGE_WIDTH) {
             // We died!
-            stage.paused = true;
+            stage.someoneIsDying = true;
             FlxTween.tween(arrowSprite, {alpha: 0}, 1);
             FlxTween.tween(this, {alpha: 0}, 1, {onComplete: finishDeath});
         }
@@ -182,7 +184,7 @@ class Player extends FlxSprite
 
     override public function update(elapsed:Float):Void
 	{
-        if (stage.paused) {
+        if (stage.isPaused()) {
             return;
         }
 
@@ -283,7 +285,7 @@ class Player extends FlxSprite
 
 
     public function tick() {
-        if (stage.paused) {
+        if (stage.isPaused()) {
             return;
         }
 

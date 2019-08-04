@@ -2,6 +2,8 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.system.FlxSound;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
 class PlayState extends FlxState
@@ -14,6 +16,10 @@ class PlayState extends FlxState
 	public var player2:Player;
 
 	public var activeHitboxes:List<Hitbox>;
+
+	public var countdownText:FlxText;
+	public var timeToGameStart:Float;
+	public var countdownBeepSound:FlxSound;
 
 	override public function create() {
 		super.create();
@@ -38,10 +44,39 @@ class PlayState extends FlxState
 		add(player2.arrowSprite);
 
 		activeHitboxes = new List<Hitbox>();
+
+		countdownText = new FlxText();
+		countdownText.setFormat(AssetPaths.squaredpixel__ttf, 32, FlxColor.WHITE, FlxTextAlign.CENTER);
+		add(countdownText);
+		timeToGameStart = 3;
+		countdownBeepSound = FlxG.sound.load(AssetPaths.block__wav, 0.3);
 	}
+
+	public function updateCountdown(elapsed:Float) {
+		if (stage.gameStarted) {
+			return;
+		}
+
+		timeToGameStart -= elapsed;
+		var newText:String = Std.string(Math.ceil(timeToGameStart));
+        if (countdownText.text != newText)
+        {
+            countdownBeepSound.play();
+        }
+        countdownText.text = newText;
+		countdownText.screenCenter();
+
+		if (timeToGameStart <= 0) {
+			stage.gameStarted = true;
+			countdownText.visible = false;
+		}
+	}
+
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+
+		updateCountdown(elapsed);
 
 		if (stage.someoneIsDead) {
 			// TODO: Probably want to display a "Player 1 wins!" message here
