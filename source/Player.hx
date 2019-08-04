@@ -169,7 +169,6 @@ class Player extends FlxSprite
     public function checkDeath():Void {
         if (x < Stage.currentStage.x || x + PLAYER_WIDTH > Stage.currentStage.x + Stage.STAGE_WIDTH) {
             // We died!
-            stage.paused = true;
             _death_sound.play();
             stage.someoneIsDying = true;
             FlxTween.tween(arrowSprite, {alpha: 0}, 1);
