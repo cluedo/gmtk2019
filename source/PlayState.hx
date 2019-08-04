@@ -6,6 +6,7 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
+import flixel.addons.display.FlxBackdrop;
 import Player.PlayerType;
 
 class PlayState extends FlxState
@@ -30,6 +31,8 @@ class PlayState extends FlxState
 
 	public var player1ScoreText:FlxText;
 	public var player2ScoreText:FlxText;
+
+    public var bgImage:FlxBackdrop;
 
 	override public function create() {
 		super.create();
@@ -89,6 +92,10 @@ class PlayState extends FlxState
 		player2ScoreText.setFormat(AssetPaths.squaredpixel__ttf, 64, Player.PLAYER_COLORS[PlayerType.PLAYER_TWO], FlxTextAlign.CENTER);
 		add(player2ScoreText);
 		updateScoreText();
+
+        bgImage = new FlxBackdrop(AssetPaths.background__png);
+        add(bgImage);
+        bgImage.visible = false;
 	}
 
 	public function updateCountdown(elapsed:Float) {
@@ -135,7 +142,15 @@ class PlayState extends FlxState
 			if (Registry.lastPlayerWon == 0) {
 				preambleText.text = "First to 5 wins.\nPress space to start.";
 			} else if (Registry.player1Score == 5 || Registry.player2Score == 5) {
-                preambleText.text = "Player " + Std.string(Registry.lastPlayerWon) + " wins!\nPress space to play again.\nPress R to go back to the menu.";
+                if(Registry.lastPlayerWon == 1) {
+                    bgImage = new FlxBackdrop(AssetPaths.player1__png);
+                }
+                else {
+                    bgImage = new FlxBackdrop(AssetPaths.player2__png);
+                }
+                add(bgImage);
+                bgImage.visible = true;
+                preambleText.text = "Player " + Std.string(Registry.lastPlayerWon) + " wins!\nPress space to play again.\nPress R for the menu.";
             }
             else {
 				preambleText.text = "Player " + Std.string(Registry.lastPlayerWon) + " scores!\nPress space to continue.";
@@ -157,10 +172,12 @@ class PlayState extends FlxState
                     Registry.player2Score = 0;
                     Registry.lastPlayerWon = 0;
                 }
+                bgImage.visible = false;
 			}
             if (FlxG.keys.pressed.R && (Registry.player1Score == 5 || Registry.player2Score == 5)) {
                 preambleText.visible = false;
                 controlsText.visible = false;
+                bgImage.visible = false;
                 Registry.player1Score = 0;
                 Registry.player2Score = 0;
                 Registry.lastPlayerWon = 0;
