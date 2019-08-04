@@ -49,8 +49,8 @@ class Hitbox {
 
 class JabHitbox extends Hitbox {
     public static var JAB_HITBOX_DURATION = 4;
-    public static var JAB_HITBOX_RADIUS = 0.1;
-    public static var JAB_HITBOX_STRENGTH = 2.0;
+    public static var JAB_HITBOX_RADIUS = 0.05;
+    public static var JAB_HITBOX_STRENGTH = 0.5;
 
     public function new(player:Player,
                         center:Float) {

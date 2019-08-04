@@ -6,7 +6,7 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 using flixel.util.FlxSpriteUtil;
 
-enum PlayerType{
+enum PlayerType {
     PLAYER_ONE;
     PLAYER_TWO;
 }
@@ -46,13 +46,21 @@ class Player extends FlxSprite
         PlayerType.PLAYER_TWO => false,
     ];
 
+    public static var GROUND_ACCELERATION = 0.05;
+    public static var GROUND_DRAG = 0.02;
+    public static var GROUND_MAX_SPEED = 0.2;
+    public static var AIR_DRAG = 0.02;
+    public static var AIR_MAX_SPEED = 1.0;
+
     public var playerType:PlayerType;
     public var inputType:InputType;
 
     public var activeAttacks:List<Attack>;
     public var activeHitboxes:List<Hitbox>;
 
-    public var speed:Float = 0;
+    public var groundSpeed:Float = 0;
+    public var airSpeed:Float = 0;
+
     public var facingRight:Bool;
 
     public var arrowSprite:FlxSprite;
@@ -128,29 +136,41 @@ class Player extends FlxSprite
         updateArrow();
 	}
 
+    public function applyDrag() {
+        if (groundSpeed > 0) {
+            groundSpeed = Math.max(0, groundSpeed - GROUND_DRAG);
+        } else {
+            groundSpeed = Math.min(0, groundSpeed + GROUND_DRAG);
+        }
+        groundSpeed = FlxMath.bound(groundSpeed, -GROUND_MAX_SPEED, GROUND_MAX_SPEED);
+
+        if (airSpeed > 0) {
+            airSpeed = Math.max(0, airSpeed - AIR_DRAG);
+        } else {
+            airSpeed = Math.min(0, airSpeed + AIR_DRAG);
+        }
+        airSpeed = FlxMath.bound(airSpeed, -AIR_MAX_SPEED, AIR_MAX_SPEED);
+    }
+
     public function movement(inputFrame:InputManager.InputFrame):Void
     {
         // adapted from http://haxeflixel.com/documentation/groundwork/
         if (inputFrame.get(InputManager.Inputs.LEFT)) {
-            speed -= 20;
+            groundSpeed -= GROUND_ACCELERATION;
         } else if (inputFrame.get(InputManager.Inputs.RIGHT)) {
-            speed += 20;
-        } else {
-            if (speed > 0) {
-                speed = Math.max(0, speed - 10);
-            } else {
-                speed = Math.min(0, speed + 10);
-            }
-        }
+            groundSpeed += GROUND_ACCELERATION;
+        } 
         
-        speed = FlxMath.bound(speed, -100, 100);
-        if (speed > 0) {
+        applyDrag();
+        var speed = groundSpeed + airSpeed;
+
+        if (groundSpeed > 0) {
             facingRight = true;
-        } else if (speed < 0) {
+        } else if (groundSpeed < 0) {
             facingRight = false;
         }
 
-        velocity.set(speed, 0);
+        velocity.set(Stage.toPixels(speed), 0);
 
         if (inputFrame.get(InputManager.Inputs.ATTACK)) {
             // stopgap until we implement attackLag
@@ -191,7 +211,11 @@ class Player extends FlxSprite
             return;
         } 
 
-        trace("HIT!");
+        if (center() < hitbox.center) {
+            airSpeed -= hitbox.strength;
+        } else {
+            airSpeed += hitbox.strength;
+        }
         hitbox.kill();
     }
 }
