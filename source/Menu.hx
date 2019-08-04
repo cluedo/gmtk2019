@@ -27,11 +27,11 @@ class Menu extends FlxState
         bgImage = new FlxBackdrop(AssetPaths.background__png);
         add(bgImage);
 		bgColor = new FlxColor(0xFF000000);
-		titleText = new FlxText(0, 150, 1024, "1D Fighter");
+		titleText = new FlxText(0, 150, 800, "Super Line Fighter 1D");
 		titleText.setFormat(AssetPaths.squaredpixel__ttf, 48, FlxColor.RED, FlxTextAlign.CENTER);
 		titleText.width += 10;
 		add(titleText);
-		helpText = new FlxText(0, 200, 1024, "Click mode to start");
+		helpText = new FlxText(0, 200, 800, "Click mode to start");
 		helpText.setFormat(AssetPaths.squaredpixel__ttf, 16, FlxColor.WHITE, FlxTextAlign.CENTER);
 		add(helpText);
         singleplayerText = new FlxText(0, 250, 1024, "Single player");
