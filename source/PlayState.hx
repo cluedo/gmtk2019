@@ -111,7 +111,10 @@ class PlayState extends FlxState
 		if (inPreamble) {
 			if (Registry.lastPlayerWon == 0) {
 				preambleText.text = "First to 5 wins.\nPress space to start.";
-			} else {
+			} else if (Registry.player1Score == 5 || Registry.player2Score == 5) {
+                preambleText.text = "Player " + Std.string(Registry.lastPlayerWon) + " wins!\nPress space to play again.";
+            }
+            else {
 				preambleText.text = "Player " + Std.string(Registry.lastPlayerWon) + " scores!\nPress space to continue.";
 			}
 
@@ -125,17 +128,23 @@ class PlayState extends FlxState
 			if (FlxG.keys.pressed.SPACE) {
 				inPreamble = false;
 				preambleText.visible = false;
+                if (Registry.player1Score == 5 || Registry.player2Score == 5) {
+                    Registry.player1Score = 0;
+                    Registry.player2Score = 0;
+                    Registry.lastPlayerWon = 0;
+                }
 			}
 			return;
 		}
 
 		updateCountdown(elapsed);
 		updateScoreText();
+        
+        if (stage.someoneIsDead) {
+        // TODO: Probably want to display a "Player 1 wins!" message here
+            FlxG.switchState(new PlayState());
+        }
 
-		if (stage.someoneIsDead) {
-			// TODO: Probably want to display a "Player 1 wins!" message here
-			FlxG.switchState(new PlayState());
-		}
 
 		// remove stale hitboxes/attacks
 		player1.removeStale();
