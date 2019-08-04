@@ -32,6 +32,10 @@ class Attack {
         return (time < duration);
     }
 
+    public function interrupt() {
+        time = duration;
+    }
+
     public function tick() {
         if (time >= duration) {
             return;

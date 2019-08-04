@@ -297,6 +297,12 @@ class Player extends FlxSprite
         }
     }
 
+    public function interrupt() {
+        for (attack in activeAttacks) {
+            attack.interrupt();
+        }
+    }
+
     public function collide(hitbox:Hitbox) {
         if (this == hitbox.player) return;
 
@@ -313,6 +319,9 @@ class Player extends FlxSprite
         if (right() < hbox_left || left() > hbox_right) {
             return;
         } 
+
+        playerState = HIT_STUN(hitbox.hitstun);
+        interrupt();
 
         if (center() < hitbox.anchor) {
             airSpeed -= hitbox.strength;
