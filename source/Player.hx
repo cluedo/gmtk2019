@@ -18,6 +18,7 @@ enum PlayerType {
 enum InputType {
     KEYBOARD_ONE;
     KEYBOARD_TWO;
+    AI;
 }
 
 enum PlayerState {
@@ -69,6 +70,8 @@ class Player extends FlxSprite
 
     public var playerType:PlayerType;
     public var inputType:InputType;
+
+    public var playerAI:AI;
 
     public var playerState:PlayerState = IDLE;
 
@@ -158,6 +161,12 @@ class Player extends FlxSprite
                 return InputManager.KeyboardIF1();
             case KEYBOARD_TWO:
                 return InputManager.KeyboardIF2();
+            case AI:
+                if (playerAI == null) {
+                    return InputManager.EmptyIF();
+                } else {
+                    return playerAI.getInput();
+                }
         }
         return InputManager.EmptyIF();
     }
