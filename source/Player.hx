@@ -89,6 +89,7 @@ class Player extends FlxSprite
     public static var _block_sound;
     public static var _attack_sound;
     public static var _defend_sound;
+    public static var _death_sound;
 
     public function left():Float {
         return Stage.toUnitsOffset(x);
@@ -148,6 +149,7 @@ class Player extends FlxSprite
         _block_sound = FlxG.sound.load(AssetPaths.block__wav, 0.3);
         _attack_sound = FlxG.sound.load(AssetPaths.attack__wav, 0.3);
         _defend_sound = FlxG.sound.load(AssetPaths.defend__wav, 0.3);
+        _death_sound = FlxG.sound.load(AssetPaths.death__wav, 0.3);
     }
 
     public function getInputFrame():InputManager.InputFrame {
@@ -170,6 +172,7 @@ class Player extends FlxSprite
     public function checkDeath():Void {
         if (x < Stage.currentStage.x || x + PLAYER_WIDTH > Stage.currentStage.x + Stage.STAGE_WIDTH) {
             // We died!
+            _death_sound.play();
             stage.someoneIsDying = true;
             FlxTween.tween(arrowSprite, {alpha: 0}, 1);
             FlxTween.tween(this, {alpha: 0}, 1, {onComplete: finishDeath});
