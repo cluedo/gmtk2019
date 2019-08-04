@@ -10,6 +10,7 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.math.FlxMath;
+import flixel.addons.display.FlxBackdrop;
 
 class Menu extends FlxState
 {
@@ -17,12 +18,15 @@ class Menu extends FlxState
     var helpText:FlxText;
 	var singleplayerText:FlxText;
 	var multiplayerText:FlxText;
+    var bgImage:FlxBackdrop;
 
 	override public function create():Void
 	{
 		super.create();
 
-		bgColor = new FlxColor(0xFF009900);
+        bgImage = new FlxBackdrop(AssetPaths.background__png);
+        add(bgImage);
+		bgColor = new FlxColor(0xFF000000);
 		titleText = new FlxText(0, 150, 1024, "1D Fighter");
 		titleText.setFormat(AssetPaths.squaredpixel__ttf, 48, FlxColor.RED, FlxTextAlign.CENTER);
 		titleText.width += 10;

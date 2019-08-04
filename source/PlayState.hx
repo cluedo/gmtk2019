@@ -128,11 +128,14 @@ class PlayState extends FlxState
 		if (inPreamble) {
 			// magic spacing don't touch
 			controlsText.text = "\n\n\n\n\n\n\n\n        Left:       A                                   LEFT\n        Right:     D                                   RIGHT\n        Attack: W                                   UP\n        Dodge:    S                                   DOWN\n        Dash:       E                                   SHIFT";
-			controlsText.visible = true;
+			if(Registry.singlePlayer) {
+                controlsText.text = "\n\n\n\n\n\n\n\n        Left:       A\n        Right:     D\n        Attack: W\n        Dodge:    S\n        Dash:       E";
+            }
+            controlsText.visible = true;
 			if (Registry.lastPlayerWon == 0) {
 				preambleText.text = "First to 5 wins.\nPress space to start.";
 			} else if (Registry.player1Score == 5 || Registry.player2Score == 5) {
-                preambleText.text = "Player " + Std.string(Registry.lastPlayerWon) + " wins!\nPress space to play again.";
+                preambleText.text = "Player " + Std.string(Registry.lastPlayerWon) + " wins!\nPress space to play again.\nPress R to go back to the menu.";
             }
             else {
 				preambleText.text = "Player " + Std.string(Registry.lastPlayerWon) + " scores!\nPress space to continue.";
@@ -155,6 +158,14 @@ class PlayState extends FlxState
                     Registry.lastPlayerWon = 0;
                 }
 			}
+            if (FlxG.keys.pressed.R && (Registry.player1Score == 5 || Registry.player2Score == 5)) {
+                preambleText.visible = false;
+                controlsText.visible = false;
+                Registry.player1Score = 0;
+                Registry.player2Score = 0;
+                Registry.lastPlayerWon = 0;
+                FlxG.switchState(new Menu());
+            }
 			return;
 		}
 
