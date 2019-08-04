@@ -179,8 +179,10 @@ class Player extends FlxSprite
     public function finishDeath(tween:FlxTween):Void {
         if (playerType == PLAYER_ONE) {
             Registry.player2Score += 1;
+            Registry.lastPlayerWon = 2;
         } else if (playerType == PLAYER_TWO) {
             Registry.player1Score += 1;
+            Registry.lastPlayerWon = 1;
         }
         stage.someoneIsDead = true;
     }

@@ -19,6 +19,9 @@ class PlayState extends FlxState
 
 	public var activeHitboxes:List<Hitbox>;
 
+	public var inPreamble:Bool;
+	public var preambleText:FlxText;
+
 	public var countdownText:FlxText;
 	public var timeToGameStart:Float;
 	public var countdownBeepSound:FlxSound;
@@ -50,6 +53,11 @@ class PlayState extends FlxState
 
 		activeHitboxes = new List<Hitbox>();
 
+		inPreamble = true;
+		preambleText = new FlxText();
+		preambleText.setFormat(AssetPaths.squaredpixel__ttf, 32, FlxColor.BLACK, FlxTextAlign.CENTER);
+		add(preambleText);
+
 		countdownText = new FlxText();
 		countdownText.setFormat(AssetPaths.squaredpixel__ttf, 32, FlxColor.WHITE, FlxTextAlign.CENTER);
 		add(countdownText);
@@ -63,6 +71,7 @@ class PlayState extends FlxState
 		player2ScoreText = new FlxText();
 		player2ScoreText.setFormat(AssetPaths.squaredpixel__ttf, 64, Player.PLAYER_COLORS[PlayerType.PLAYER_TWO], FlxTextAlign.CENTER);
 		add(player2ScoreText);
+		updateScoreText();
 	}
 
 	public function updateCountdown(elapsed:Float) {
@@ -98,6 +107,27 @@ class PlayState extends FlxState
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+
+		if (inPreamble) {
+			if (Registry.lastPlayerWon == 0) {
+				preambleText.text = "First to 5 wins.\nPress space to start.";
+			} else {
+				preambleText.text = "Player " + Std.string(Registry.lastPlayerWon) + " scores!\nPress space to continue.";
+			}
+
+			if (Registry.lastPlayerWon == 1) {
+				preambleText.color = Player.PLAYER_COLORS[PlayerType.PLAYER_ONE];
+			} else if (Registry.lastPlayerWon == 2) {
+				preambleText.color = Player.PLAYER_COLORS[PlayerType.PLAYER_TWO];
+			}
+			preambleText.x = (FlxG.width - preambleText.width) / 2;
+			preambleText.y = FlxG.height/6;
+			if (FlxG.keys.pressed.SPACE) {
+				inPreamble = false;
+				preambleText.visible = false;
+			}
+			return;
+		}
 
 		updateCountdown(elapsed);
 		updateScoreText();
