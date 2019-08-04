@@ -209,7 +209,8 @@ class Player extends FlxSprite
                     invulnerable = true;
                     replaceColor(PLAYER_COLORS[playerType], FlxColor.WHITE);
                     _block_sound.play();
-                    new FlxTimer().start(1, turnOffInvulnerability, 1);
+                    playerState = ATTACK_LAG(30);
+                    new FlxTimer().start(0.3, turnOffInvulnerability, 1);
                 }
 
             case ATTACK_LAG(frames):
