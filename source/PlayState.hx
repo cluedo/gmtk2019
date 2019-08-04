@@ -22,6 +22,8 @@ class PlayState extends FlxState
 	public var inPreamble:Bool;
 	public var preambleText:FlxText;
 
+    public var controlsText:FlxText;
+
 	public var countdownText:FlxText;
 	public var timeToGameStart:Float;
 	public var countdownBeepSound:FlxSound;
@@ -58,6 +60,11 @@ class PlayState extends FlxState
 		preambleText = new FlxText();
 		preambleText.setFormat(AssetPaths.squaredpixel__ttf, 32, FlxColor.BLACK, FlxTextAlign.CENTER);
 		add(preambleText);
+
+        controlsText = new FlxText();
+		controlsText.setFormat(AssetPaths.squaredpixel__ttf, 32, FlxColor.BLACK, FlxTextAlign.LEFT);
+		add(controlsText);
+        controlsText.visible = false;
 
 		countdownText = new FlxText();
 		countdownText.setFormat(AssetPaths.squaredpixel__ttf, 32, FlxColor.WHITE, FlxTextAlign.CENTER);
@@ -112,6 +119,9 @@ class PlayState extends FlxState
 		if (inPreamble) {
 			if (Registry.lastPlayerWon == 0) {
 				preambleText.text = "First to 5 wins.\nPress space to start.";
+                // magic spacing don't touch
+                controlsText.text = "\n\n\n\n\n\n\n\n        Left:       A                                   LEFT\n        Right:     D                                   RIGHT\n        Attack: W                                   UP\n        Dodge:    S                                   DOWN\n        Dash:       E                                   SHIFT";
+                controlsText.visible = true;
 			} else if (Registry.player1Score == 5 || Registry.player2Score == 5) {
                 preambleText.text = "Player " + Std.string(Registry.lastPlayerWon) + " wins!\nPress space to play again.";
             }
@@ -129,6 +139,7 @@ class PlayState extends FlxState
 			if (FlxG.keys.pressed.SPACE) {
 				inPreamble = false;
 				preambleText.visible = false;
+                controlsText.visible = false;
                 if (Registry.player1Score == 5 || Registry.player2Score == 5) {
                     Registry.player1Score = 0;
                     Registry.player2Score = 0;
@@ -140,7 +151,7 @@ class PlayState extends FlxState
 
 		updateCountdown(elapsed);
 		updateScoreText();
-        
+
         if (stage.someoneIsDead) {
         // TODO: Probably want to display a "Player 1 wins!" message here
             FlxG.switchState(new PlayState());
