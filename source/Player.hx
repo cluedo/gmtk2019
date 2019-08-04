@@ -62,6 +62,8 @@ class Player extends FlxSprite
     public static var AIR_DRAG = 0.02;
     public static var AIR_MAX_SPEED = 1.0;
     public static var AIR_REPEL = 0.05;
+    public static var DASH_TIMER = 120;
+    public static var DASH_LENGTH = 0.12;
 
     public var stage:Stage;
 
@@ -75,6 +77,7 @@ class Player extends FlxSprite
 
     public var groundSpeed:Float = 0;
     public var airSpeed:Float = 0;
+    public var dashTimer:Int = 0;
 
     public var facingRight:Bool;
 
@@ -213,6 +216,15 @@ class Player extends FlxSprite
         airSpeed = FlxMath.bound(airSpeed, -AIR_MAX_SPEED, AIR_MAX_SPEED);
     }
 
+    public function dash()
+    {
+        if (facingRight) {
+            x += Stage.toPixels(DASH_LENGTH);
+        } else {
+            x -= Stage.toPixels(DASH_LENGTH);
+        }
+    }
+
     public function movement(inputFrame:InputManager.InputFrame):Void
     {
         switch (playerState) {
@@ -241,6 +253,13 @@ class Player extends FlxSprite
                     _block_sound.play();
                     playerState = ATTACK_LAG(30);
                     new FlxTimer().start(0.3, turnOffInvulnerability, 1);
+                }
+
+                if (inputFrame.get(InputManager.Inputs.DASH)) {
+                    if (dashTimer == 0) {
+                        dash();
+                        dashTimer = DASH_TIMER;
+                    }
                 }
 
             case ATTACK_LAG(frames):
@@ -297,6 +316,8 @@ class Player extends FlxSprite
         for (attack in activeAttacks) {
             attack.tick();
         }
+
+        if (dashTimer > 0) dashTimer--;
     }
 
     public function interrupt() {

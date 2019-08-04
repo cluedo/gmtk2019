@@ -7,6 +7,7 @@ enum Inputs{
     RIGHT;
     ATTACK;
     DEFEND;
+    DASH;
 }
 
 typedef InputFrame = Map<Inputs, Bool>;
@@ -31,6 +32,9 @@ class InputManager
 
         inputFrame.set(Inputs.DEFEND,
                        FlxG.keys.anyPressed([S]));
+
+        inputFrame.set(Inputs.DASH,
+                       FlxG.keys.anyPressed([E]));
         return inputFrame;
     }
 
@@ -48,6 +52,10 @@ class InputManager
 
         inputFrame.set(Inputs.DEFEND,
                        FlxG.keys.anyPressed([DOWN]));
+
+        inputFrame.set(Inputs.DASH,
+                       FlxG.keys.anyPressed([SHIFT]));
+
         return inputFrame;
     }
 }
