@@ -6,7 +6,7 @@ import flixel.util.FlxColor;
 class Stage extends FlxSprite
 {
     public static var STAGE_WIDTH:Int = 600;
-    public static var STAGE_HEIGHT:Int = 8;
+    public static var STAGE_HEIGHT:Int = 100;
 
     public static var currentStage:Stage;
 

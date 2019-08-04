@@ -6,25 +6,28 @@ class Hitbox {
     public var duration:Int;
     public var radius:Float = 0;
     public var strength:Float;
-    public var center:Float = 0;
+    public var hitstun:Int;
 
     public var time:Int = 0;
     public var active:Bool = false;
     
     public var player:Player;
     public var sprite:HitboxSprite;
+    public var center:Float = 0;
 
     public function new(player:Player,
                         center:Float,
                         duration:Int,
                         radius:Float, 
-                        strength:Float) {
+                        strength:Float,
+                        hitstun:Int) {
         this.player = player;
         this.center = center;
 
         this.duration = duration;
         this.radius = radius;
         this.strength = strength;
+        this.hitstun = hitstun;
     }
 
     public function kill() {
@@ -51,12 +54,14 @@ class JabHitbox extends Hitbox {
     public static var JAB_HITBOX_DURATION = 4;
     public static var JAB_HITBOX_RADIUS = 0.05;
     public static var JAB_HITBOX_STRENGTH = 0.5;
+    public static var JAB_HITBOX_HITSTUN = 3;
 
     public function new(player:Player,
                         center:Float) {
         super(player, center, 
               JAB_HITBOX_DURATION,
               JAB_HITBOX_RADIUS,
-              JAB_HITBOX_STRENGTH);
+              JAB_HITBOX_STRENGTH,
+              JAB_HITBOX_HITSTUN);
     }
 }

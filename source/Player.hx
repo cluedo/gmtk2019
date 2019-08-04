@@ -17,6 +17,12 @@ enum InputType {
     KEYBOARD_TWO;
 }
 
+enum PlayerState {
+    IDLE;
+    ATTACK_LAG(frames:Int);
+    HIT_STUN(frames:Int);
+}
+
 class Player extends FlxSprite
 {
     public static var PLAYER_SIZE:Float = 0.05;
@@ -57,6 +63,8 @@ class Player extends FlxSprite
     public var playerType:PlayerType;
     public var inputType:InputType;
 
+    public var playerState:PlayerState = IDLE;
+
     public var activeAttacks:List<Attack>;
     public var activeHitboxes:List<Hitbox>;
 
@@ -79,6 +87,14 @@ class Player extends FlxSprite
 
     public function right():Float {
         return Stage.toUnitsOffset(x) + PLAYER_SIZE;
+    }
+
+    public function face(?offset:Float=0):Float {
+        if (facingRight) {
+            return right() + offset;
+        } else {
+            return left() - offset;
+        }
     }
 
     public function new(stage:Stage,
@@ -158,15 +174,45 @@ class Player extends FlxSprite
 
     public function movement(inputFrame:InputManager.InputFrame):Void
     {
-        // adapted from http://haxeflixel.com/documentation/groundwork/
-        if (inputFrame.get(InputManager.Inputs.LEFT)) {
-            groundSpeed -= GROUND_ACCELERATION;
-        } else if (inputFrame.get(InputManager.Inputs.RIGHT)) {
-            groundSpeed += GROUND_ACCELERATION;
-        } 
-        
-        applyDrag();
-        var speed = groundSpeed + airSpeed;
+        switch (playerState) {
+            case IDLE:
+                if (inputFrame.get(InputManager.Inputs.LEFT)) {
+                    groundSpeed -= GROUND_ACCELERATION;
+                } else if (inputFrame.get(InputManager.Inputs.RIGHT)) {
+                    groundSpeed += GROUND_ACCELERATION;
+                } 
+
+                if (inputFrame.get(InputManager.Inputs.ATTACK)) {
+                    var attack = new Attack.JabAttack(this);
+                    activeAttacks.add(attack);
+                    playerState = ATTACK_LAG(attack.attackLag);
+                }
+
+                var turnOffInvulnerability:FlxTimer->Void = function(t:FlxTimer){
+                    invulnerable = false;
+                    replaceColor(FlxColor.WHITE, PLAYER_COLORS[playerType]);
+                };
+                
+                if (inputFrame.get(InputManager.Inputs.DEFEND)) {
+                    invulnerable = true;
+                    replaceColor(PLAYER_COLORS[playerType], FlxColor.WHITE);
+                    new FlxTimer().start(1, turnOffInvulnerability, 1);
+                }
+
+            case ATTACK_LAG(frames):
+                if (frames == 1) {
+                    playerState = IDLE;
+                } else {
+                    playerState = ATTACK_LAG(frames-1);
+                }
+            
+            case HIT_STUN(frames):
+                if (frames == 1) {
+                    playerState = IDLE;
+                } else {
+                    playerState = HIT_STUN(frames-1);
+                }
+        }
 
         if (groundSpeed > 0) {
             facingRight = true;
@@ -174,26 +220,10 @@ class Player extends FlxSprite
             facingRight = false;
         }
 
+        applyDrag();
+        var speed = groundSpeed + airSpeed;
+
         velocity.set(Stage.toPixels(speed), 0);
-
-        if (inputFrame.get(InputManager.Inputs.ATTACK)) {
-            // stopgap until we implement attackLag
-            if (activeAttacks.isEmpty()) {
-                var attack = new Attack.JabAttack(this);
-                activeAttacks.add(attack);
-            } 
-        }
-
-        var turnOffInvulnerability:FlxTimer->Void = function(t:FlxTimer){
-            invulnerable = false;
-            replaceColor(FlxColor.WHITE, PLAYER_COLORS[playerType]);
-        };
-        
-        if (inputFrame.get(InputManager.Inputs.DEFEND)) {
-            invulnerable = true;
-            replaceColor(PLAYER_COLORS[playerType], FlxColor.WHITE);
-            new FlxTimer().start(1, turnOffInvulnerability, 1);
-        }
     }
 
 

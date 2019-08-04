@@ -46,8 +46,8 @@ class Attack {
 }
 
 class JabAttack extends Attack {
-    public static var JAB_DURATION = 20;
-    public static var JAB_ATTACK_LAG = 4;
+    public static var JAB_DURATION = 4;
+    public static var JAB_ATTACK_LAG = 10;
 
     public function new(player:Player) {
         super(player, JAB_DURATION, JAB_ATTACK_LAG);
