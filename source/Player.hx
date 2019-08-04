@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxSprite;
+import flixel.addons.effects.FlxTrail;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.tweens.FlxTween;
@@ -87,6 +88,7 @@ class Player extends FlxSprite
     public var invulnerable:Bool = false;
 
     public var arrowSprite:FlxSprite;
+    public var trail:FlxTrail;
 
     public static var _hit_sound;
     public static var _block_sound;
@@ -148,6 +150,8 @@ class Player extends FlxSprite
         vertices.push(new FlxPoint(this.height/2 + ARROW_OFFSET, this.height));
         arrowSprite.drawPolygon(vertices, PLAYER_ARROW_COLORS[playerType]);
         updateArrow();
+
+        trail = new FlxTrail(this);
         
         _hit_sound = FlxG.sound.load(AssetPaths.hit__wav, 0.3);
         _block_sound = FlxG.sound.load(AssetPaths.block__wav, 0.3);
@@ -335,6 +339,12 @@ class Player extends FlxSprite
         }
 
         if (dashTimer > 0) dashTimer--;
+
+        if (dashTimer == 0) {
+            trail.visible = true;
+        } else {
+            trail.visible = false;
+        }
     }
 
     public function interrupt() {
