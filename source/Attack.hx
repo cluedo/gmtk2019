@@ -55,3 +55,15 @@ class JabAttack extends Attack {
         addHitbox(0, new Hitbox.JabHitbox(player, anchor));
     }
 }
+
+class SwordAttack extends Attack {
+    public static var SWORD_DURATION = 15;
+    public static var SWORD_ATTACK_LAG = 48;
+    public static var SWORD_OFFSET = 0.07;
+
+    public function new(player:Player) {
+        super(player, SWORD_DURATION, SWORD_ATTACK_LAG);
+
+        addHitbox(12, new Hitbox.SwordHitbox(player, player.face(SWORD_OFFSET)));
+    }
+}

@@ -16,7 +16,7 @@ class HitboxSprite extends FlxSprite {
     public function new(width:Int, 
                         x:Float, 
                         duration:Float, 
-                        color:FlxColor = FlxColor.LIME) {
+                        color:FlxColor = FlxColor.MAGENTA) {
         super();
 
         this.duration = duration;

@@ -7,6 +7,7 @@ class Hitbox {
     public var radius:Float = 0;
     public var strength:Float;
     public var hitstun:Int;
+    public var animationLength:Int;
 
     public var time:Int = 0;
     public var active:Bool = false;
@@ -20,7 +21,8 @@ class Hitbox {
                         duration:Int,
                         radius:Float, 
                         strength:Float,
-                        hitstun:Int) {
+                        hitstun:Int,
+                        animationLength:Int) {
         this.player = player;
         this.center = center;
 
@@ -28,6 +30,7 @@ class Hitbox {
         this.radius = radius;
         this.strength = strength;
         this.hitstun = hitstun;
+        this.animationLength = animationLength;
     }
 
     public function kill() {
@@ -45,7 +48,7 @@ class Hitbox {
     public function trigger() {
         sprite = new HitboxSprite(Math.round(Stage.toPixels(2 * radius)),
                                   Stage.toPixelsOffset(center - radius),
-                                  duration * FRAME_DURATION);
+                                  animationLength * FRAME_DURATION);
         PlayState.currentGame.activateHitbox(this);
     }
 }
@@ -55,6 +58,8 @@ class JabHitbox extends Hitbox {
     public static var JAB_HITBOX_RADIUS = 0.05;
     public static var JAB_HITBOX_STRENGTH = 0.5;
     public static var JAB_HITBOX_HITSTUN = 3;
+    public static var JAB_HITBOX_ANIMATION = 10;
+
 
     public function new(player:Player,
                         center:Float) {
@@ -62,6 +67,25 @@ class JabHitbox extends Hitbox {
               JAB_HITBOX_DURATION,
               JAB_HITBOX_RADIUS,
               JAB_HITBOX_STRENGTH,
-              JAB_HITBOX_HITSTUN);
+              JAB_HITBOX_HITSTUN,
+              JAB_HITBOX_ANIMATION);
+    }
+}
+
+class SwordHitbox extends Hitbox {
+    public static var SWORD_HITBOX_DURATION = 3;
+    public static var SWORD_HITBOX_RADIUS = 0.05;
+    public static var SWORD_HITBOX_STRENGTH = 0.8;
+    public static var SWORD_HITBOX_HITSTUN = 40;
+    public static var SWORD_HITBOX_ANIMATION = 40;
+
+    public function new(player:Player,
+                        center:Float) {
+        super(player, center, 
+              SWORD_HITBOX_DURATION,
+              SWORD_HITBOX_RADIUS,
+              SWORD_HITBOX_STRENGTH,
+              SWORD_HITBOX_HITSTUN,
+              SWORD_HITBOX_ANIMATION);
     }
 }

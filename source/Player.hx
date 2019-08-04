@@ -194,7 +194,7 @@ class Player extends FlxSprite
                 } 
 
                 if (inputFrame.get(InputManager.Inputs.ATTACK)) {
-                    var attack = new Attack.JabAttack(this);
+                    var attack = new Attack.SwordAttack(this);
                     _attack_sound.play();
                     activeAttacks.add(attack);
                     playerState = ATTACK_LAG(attack.attackLag);
@@ -242,9 +242,10 @@ class Player extends FlxSprite
 
 
     public function removeStale() {
+        /*
         for (hitbox in activeHitboxes) {
 			if (!hitbox.alive()) hitbox.sprite.kill();
-		}
+        }*/
 		activeHitboxes = activeHitboxes.filter(function(hitbox) return hitbox.alive());
 
         activeAttacks = activeAttacks.filter(function(attack) return attack.alive());
