@@ -43,6 +43,10 @@ class AttackAI extends AI
             
         }
 
+        if (random.bool(1)) {
+            input[InputManager.Inputs.DASH] = true;
+        }
+
         return input;
     }
 }
