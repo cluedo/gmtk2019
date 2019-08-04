@@ -56,6 +56,8 @@ class PlayState extends FlxState
 			player1.collide(hitbox);
 		}
 
+		player1.collidePlayers(player2);
+		player2.collidePlayers(player1);
 
 		// tick
 		player1.tick();

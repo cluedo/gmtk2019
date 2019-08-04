@@ -52,6 +52,7 @@ class Player extends FlxSprite
     public static var GROUND_MAX_SPEED = 0.2;
     public static var AIR_DRAG = 0.02;
     public static var AIR_MAX_SPEED = 1.0;
+    public static var AIR_REPEL = 0.05;
 
     public var playerType:PlayerType;
     public var inputType:InputType;
@@ -235,5 +236,17 @@ class Player extends FlxSprite
             airSpeed += hitbox.strength;
         }
         hitbox.kill();
+    }
+
+    public function collidePlayers(player:Player) {
+        if (right() < player.left() || left() > player.right()) {
+            return;
+        }
+
+        if (center() < player.center()) {
+            airSpeed -= AIR_REPEL;
+        } else {
+            airSpeed += AIR_REPEL;
+        }
     }
 }
