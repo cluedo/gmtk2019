@@ -93,6 +93,7 @@ class Player extends FlxSprite
     public static var _attack_sound;
     public static var _defend_sound;
     public static var _death_sound;
+    public static var _dash_sound;
 
     public function left():Float {
         return Stage.toUnitsOffset(x);
@@ -153,6 +154,7 @@ class Player extends FlxSprite
         _attack_sound = FlxG.sound.load(AssetPaths.attack__wav, 0.3);
         _defend_sound = FlxG.sound.load(AssetPaths.defend__wav, 0.3);
         _death_sound = FlxG.sound.load(AssetPaths.death__wav, 0.3);
+        _dash_sound = FlxG.sound.load(AssetPaths.dash__wav, 0.3);
     }
 
     public function getInputFrame():InputManager.InputFrame {
@@ -271,6 +273,7 @@ class Player extends FlxSprite
 
                 if (inputFrame.get(InputManager.Inputs.DASH)) {
                     if (dashTimer == 0) {
+                        _dash_sound.play();
                         dash();
                         dashTimer = DASH_TIMER;
                     }
