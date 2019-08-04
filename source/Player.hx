@@ -3,12 +3,8 @@ package;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
-import flixel.util.FlxColor;
-<<<<<<< HEAD
 import flixel.util.FlxTimer;
-=======
 using flixel.util.FlxSpriteUtil;
->>>>>>> 2c3a5218f9c2955fec147b80ae4ec8fcfab74d81
 
 enum PlayerType{
     PLAYER_ONE;
