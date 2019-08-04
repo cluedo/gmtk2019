@@ -6,6 +6,8 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 using flixel.util.FlxSpriteUtil;
+import flixel.system.FlxSound;
+import flixel.FlxG;
 
 enum PlayerType {
     PLAYER_ONE;
@@ -68,6 +70,11 @@ class Player extends FlxSprite
 
     public var arrowSprite:FlxSprite;
 
+    public static var _hit_sound;
+    public static var _block_sound;
+    public static var _attack_sound;
+    public static var _defend_sound;
+
     public function left():Float {
         return Stage.toUnitsOffset(x);
     }
@@ -111,6 +118,10 @@ class Player extends FlxSprite
         vertices.push(new FlxPoint(this.height/2 + ARROW_OFFSET + ARROW_WIDTH, this.height));
         vertices.push(new FlxPoint(this.height/2 + ARROW_OFFSET, this.height));
         arrowSprite.drawPolygon(vertices, PLAYER_ARROW_COLORS[playerType]);
+        _hit_sound = FlxG.sound.load(AssetPaths.hit__wav, 0.3);
+        _block_sound = FlxG.sound.load(AssetPaths.block__wav, 0.3);
+        _attack_sound = FlxG.sound.load(AssetPaths.attack__wav, 0.3);
+        _defend_sound = FlxG.sound.load(AssetPaths.defend__wav, 0.3);
     }
 
     public function getInputFrame():InputManager.InputFrame {
@@ -179,6 +190,7 @@ class Player extends FlxSprite
             // stopgap until we implement attackLag
             if (activeAttacks.isEmpty()) {
                 var attack = new Attack.JabAttack(this);
+                _attack_sound.play();
                 activeAttacks.add(attack);
             } 
         }
@@ -191,6 +203,7 @@ class Player extends FlxSprite
         if (inputFrame.get(InputManager.Inputs.DEFEND)) {
             invulnerable = true;
             replaceColor(PLAYER_COLORS[playerType], FlxColor.WHITE);
+            _block_sound.play();
             new FlxTimer().start(1, turnOffInvulnerability, 1);
         }
     }
@@ -220,7 +233,14 @@ class Player extends FlxSprite
     }
 
     public function collide(hitbox:Hitbox) {
-        if (this == hitbox.player || this.invulnerable) return;
+        if (this == hitbox.player) return;
+
+        if(this.invulnerable) {
+            _block_sound.play();
+            return;
+        }
+
+        _hit_sound.play();
 
         var hbox_left = hitbox.center - hitbox.radius;
         var hbox_right = hitbox.center + hitbox.radius;
