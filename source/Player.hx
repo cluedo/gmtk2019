@@ -3,6 +3,7 @@ package;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 using flixel.util.FlxSpriteUtil;
 
