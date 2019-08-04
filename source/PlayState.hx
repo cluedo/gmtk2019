@@ -121,7 +121,7 @@ class PlayState extends FlxState
 			stage.gameStarted = true;
 			countdownText.visible = false;
 			if (FlxG.sound.music == null) {
-				FlxG.sound.playMusic(AssetPaths.maybe_1d_song__wav, .5, true);
+				FlxG.sound.playMusic(AssetPaths.maybe_1d_song__ogg, .5, true);
 			} else {
 				FlxG.sound.resume();
 			}
