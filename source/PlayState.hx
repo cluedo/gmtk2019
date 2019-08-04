@@ -47,11 +47,6 @@ class PlayState extends FlxState
 		player1 = new Player(stage,
 							 Player.PlayerType.PLAYER_ONE,
 							 Player.InputType.KEYBOARD_ONE);
-		add(player1.trail);
-		add(player1);
-		add(player1.arrowSprite);
-		
-
 
 		if (Registry.singlePlayer) {
 			player2 = new Player(stage,
@@ -64,10 +59,16 @@ class PlayState extends FlxState
 							Player.InputType.KEYBOARD_TWO);
 		}
 		
+		add(player1.trail);
 		add(player2.trail);
+
+		add(player1);
+		add(player1.arrowSprite);
+		add(player1.disabledSprite);
+
 		add(player2);
 		add(player2.arrowSprite);
-		
+		add(player2.disabledSprite);
 
 
 		activeHitboxes = new List<Hitbox>();

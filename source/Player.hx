@@ -88,7 +88,8 @@ class Player extends FlxSprite
     public var invulnerable:Bool = false;
 
     public var arrowSprite:FlxSprite;
-    public var trail:FlxTrail;
+    public var disabledSprite:FlxSprite;
+    public var trail:FlxTrail;    
 
     public static var _hit_sound;
     public static var _block_sound;
@@ -149,9 +150,15 @@ class Player extends FlxSprite
         vertices.push(new FlxPoint(this.height/2 + ARROW_OFFSET + ARROW_WIDTH, this.height));
         vertices.push(new FlxPoint(this.height/2 + ARROW_OFFSET, this.height));
         arrowSprite.drawPolygon(vertices, PLAYER_ARROW_COLORS[playerType]);
+
+        disabledSprite = new FlxSprite();
+        disabledSprite.makeGraphic(PLAYER_WIDTH, PLAYER_HEIGHT, FlxColor.GRAY);
+        disabledSprite.alpha = 0;
         updateArrow();
+        
 
         trail = new FlxTrail(this);
+        
         
         _hit_sound = FlxG.sound.load(AssetPaths.hit__wav, 0.3);
         _block_sound = FlxG.sound.load(AssetPaths.block__wav, 0.3);
@@ -180,6 +187,8 @@ class Player extends FlxSprite
     public function updateArrow():Void {
         arrowSprite.x = x;
         arrowSprite.y = y;
+        disabledSprite.x = x;
+        disabledSprite.y = y;
 
         arrowSprite.flipX = facingRight;
     }
@@ -238,6 +247,8 @@ class Player extends FlxSprite
 
     public function dash()
     {
+        disabledSprite.alpha = 1.0;
+        FlxTween.tween(disabledSprite, {alpha: 0}, DASH_TIMER/60.0);
         if (facingRight) {
             x += Stage.toPixels(DASH_LENGTH);
         } else {
