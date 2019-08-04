@@ -97,6 +97,7 @@ class Player extends FlxSprite
     public static var _defend_sound;
     public static var _death_sound;
     public static var _dash_sound;
+    public static var _dashready_sound;
 
     public function left():Float {
         return Stage.toUnitsOffset(x);
@@ -166,6 +167,7 @@ class Player extends FlxSprite
         _defend_sound = FlxG.sound.load(AssetPaths.defend__wav, 0.3);
         _death_sound = FlxG.sound.load(AssetPaths.death__wav, 0.3);
         _dash_sound = FlxG.sound.load(AssetPaths.dash__wav, 0.3);
+        _dashready_sound = FlxG.sound.load(AssetPaths.dashready__wav, 0.3);
     }
 
     public function getInputFrame():InputManager.InputFrame {
@@ -353,6 +355,9 @@ class Player extends FlxSprite
         if (dashTimer > 0) dashTimer--;
 
         if (dashTimer == 0) {
+            if(trail.visible == false) {
+                _dashready_sound.play();
+            }
             trail.visible = true;
         } else {
             trail.visible = false;
