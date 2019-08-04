@@ -63,8 +63,8 @@ class Player extends FlxSprite
     public static var AIR_DRAG = 0.02;
     public static var AIR_MAX_SPEED = 1.0;
     public static var AIR_REPEL = 0.05;
-    public static var DASH_TIMER = 120;
-    public static var DASH_LENGTH = 0.12;
+    public static var DASH_TIMER = 240;
+    public static var DASH_LENGTH = 0.11;
 
     public var stage:Stage;
 

@@ -166,7 +166,7 @@ class PlayState extends FlxState
 			if (FlxG.keys.pressed.SPACE) {
 				inPreamble = false;
 				preambleText.visible = false;
-//                controlsText.visible = false;
+                controlsText.visible = false;
                 if (Registry.player1Score == 5 || Registry.player2Score == 5) {
                     Registry.player1Score = 0;
                     Registry.player2Score = 0;
