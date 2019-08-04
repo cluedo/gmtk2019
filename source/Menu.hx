@@ -43,10 +43,12 @@ class Menu extends FlxState
 		super.update(elapsed);
 		if (FlxG.mouse.justPressed && FlxG.mouse.overlaps(singleplayerText))
 		{
+			Registry.singlePlayer = true;
 			FlxG.switchState(new PlayState());
 		}
 		if (FlxG.mouse.justPressed && FlxG.mouse.overlaps(multiplayerText))
 		{
+			Registry.singlePlayer = false;
 			FlxG.switchState(new PlayState());
 		}
 	}
